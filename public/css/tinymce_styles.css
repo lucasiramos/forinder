@@ -1,0 +1,61 @@
+@font-face {
+	font-family: Oxygen;
+	src: url(http://localhost:4741/DevStudio/Proyectos/forinder/public/css/fuentes/Oxygen-Regular.ttf);
+}
+@font-face {
+	font-family: OxygenBold;
+	src: url(http://localhost:4741/DevStudio/Proyectos/forinder/public/css/fuentes/Oxygen-Bold.ttf);
+}
+@font-face {
+	font-family: OxygenLight;
+	src: url(http://localhost:4741/DevStudio/Proyectos/forinder/public/css/fuentes/Oxygen-Light.ttf);
+}
+
+p{
+	font-size: 16px;
+	font-family: Oxygen;
+}
+
+.titulo-1{
+	font-family: OxygenBold;
+	font-size: 30px;
+}
+
+.titulo-2{
+	color: #1F7C97;
+	font-family: OxygenBold;
+	font-size: 27px;
+}
+
+.titulo-3{
+	font-family: OxygenBold;
+	font-size: 21px;
+	text-transform:uppercase;
+}
+
+.titulo-4{
+	font-family: OxygenBold;
+	font-size: 20px;
+
+}
+
+.titulo-5{
+	font-family: OxygenBold;
+	font-size: 18px;
+	text-decoration: underline;
+}
+
+table td{
+	padding: 5px;
+	font-family: Oxygen;
+}
+
+.ImagenIzquierda{
+	float: left;
+	margin: 0px 10px 0px 0px;
+}
+
+.ImagenDerecha{
+	float: left;
+	margin: 0px 0px 0px 10px;
+}

@@ -1,0 +1,176 @@
+Creé del proyecto con:
+	composer create-project laravel/laravel="6.*" forinder
+
+Instalé Spatie Backup con:
+	composer require spatie/laravel-backup
+	php artisan vendor:publish --provider="Spatie\Backup\BackupServiceProvider"
+
+Creé la DB, por ahora vacía
+
+Fui siguiendo los pasos para la configuración del backup
+
+Configurar DB en .env!
+
+Creé las migraciones de las tablas y las ejecuté con:
+	php artisan migrate
+
+Ahora habilito el login de usuarios con:
+	composer require laravel/ui="1.*" --dev
+		Esto es porque estoy usando la versión 6.x de Laravel, para que funque Cron Jobs en NetServices
+
+	php artisan ui vue --auth
+	npm install
+	npm run dev
+
+Como puse campos especiales en tabla del usuario tuve que modificar:
+	/app/Http/Controllers/Auth/RegisterController.php
+	También la vista de creación de usuarios
+
+Creo algunas rutas públicas y privadas para testear
+
+De Controller a Blade, Básico:
+	// Controller:
+	public function MuestraSeccion($slug){
+    	$parametro = "Paso el dato: " . $slug;
+        return view('secciones.seccion', [
+            'slug' => $parametro
+        ]);
+    }
+
+    // Blade:
+    <body style="font-family: Arial; margin:30px;">
+		<p>Hola que tal, soy una sección</p>
+		<b>{{ $slug }}</b>
+	</body>
+
+QueryBuilder básico
+	$seccion = Seccion::where('slug', $slug)->first();
+
+	//Busco por id principal:
+	$seccion = Seccion::find(1);
+	var_dump($seccion->nombre);
+	die();
+
+	//Traigo toda la colección
+	$secciones = Seccion::get();
+	foreach ($secciones as $seccion) {
+		var_dump($seccion->nombre);
+	}
+	die();
+
+	//Traigo toda la colección que cumpla con un criterio
+	$secciones = Seccion::where('id', '<', '3')->get();
+	foreach ($secciones as $seccion) {
+		var_dump($seccion->nombre);
+	}
+	die();
+
+Creo modelo de Secciones
+
+TinyMCE 5
+	<p><input type="text" value="aaa"></p>
+	<textarea id="txtMce">
+	</textarea>
+	<p><input type="text" value="bbb"></p>
+	<button id="cmdCheck">Hola 2</button>
+
+	<script>
+		tinymce.init({
+			selector: 'textarea',
+			plugins: 'image a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+			toolbar: 'image a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+			toolbar_mode: 'floating',
+			tinycomments_mode: 'embedded',
+			tinycomments_author: 'Author name',
+			image_list: [
+			    {title: 'My image 1', value: 'http://rian.inta.gob.ar/Imagenes/Logo_INTA.jpg'},
+			    {title: 'My image 2', value: 'http://rian.inta.gob.ar/Imagenes/LogoRIAN.jpg'}
+			],
+			setup: function (editor) {
+				editor.on('init', function () {
+					console.log("123123")
+					editor.setContent($("#mceContent").val());
+				});
+			},
+			style_formats: [
+			    {
+			        title: 'Image Left',
+			        selector: 'img',
+			        styles: {
+			            'float': 'left', 
+			            'margin': '0 10px 0 0'
+			        }
+			     },
+			     {
+			         title: 'Image Right',
+			         selector: 'img', 
+			         styles: {
+			             'float': 'right', 
+			             'margin': '0 0 10px 10px'
+			         }
+			     },
+			     {
+			         title: 'destacado',
+			         selector: 'p', 
+			         styles: {
+			             'float': 'left', 
+			             'margin': '0 0 10px 10px',
+			             'background-color': 'gray',
+			             'padding': '20px',
+			             'font-weight': 'bold'
+			         }
+			     },
+			     { title: 'Título 1', block: 'h2', classes: 'titulo-1' },
+			     { title: 'Título 2', block: 'h3', classes: 'titulo-2' },
+			     { title: 'Título 3', block: 'h4', classes: 'titulo-3' },
+			     { title: 'Título 4', block: 'h5', classes: 'titulo-4' },
+			     { title: 'Título 5', block: 'h6', classes: 'titulo-5' }
+			],
+			content_css : "http://localhost:4741/DevStudio/Proyectos/forinder/public/css/tinymce_styles.css",
+			language: 'es'
+		});
+
+		$(function(){
+			$(document).on('click', '#cmdCheck', function(event){
+				event.preventDefault();
+
+				alert(tinyMCE.activeEditor.getContent())
+				$("#mceContent").val(tinyMCE.activeEditor.getContent())
+				alert($("#mceContent").val())
+			});
+
+			$(document).on('click', '#cmdGrabar', function(event){
+				$("#mceContent").val(tinyMCE.activeEditor.getContent())
+			});
+		})
+  </script>
+
+Cambio de huso horario en proyecto
+	Buscar "'timezone' =>" en /config/app.php
+
+Variables globales personalizadas (como en web.config, ponele...):
+	En /config/[nombre_php].php setear las constantes:
+		En /config/global.php (global.php lo creé yo) puse
+			<?php
+			   
+			return [
+				'URL' => 'http://localhost:4741/curso-udemy-php/api-react-ventas/public',
+			]
+			  
+			?>
+
+		Y eso lo accedo en controlador con:
+			config('global.URL')
+
+Claves foráneas personalizadas en HasMany y BelongsTo
+	Lo tengo que especificar en los dos lados. Un autor tiene muchos artículos:
+		('creado_por' es la clave foránea en la tabla Artículos (IdAutor, ponele))
+		Modelo Autor:
+			public function articulos(){
+		        return $this->hasMany('App\Articulo', 'creado_por');
+		    }
+
+		Modelo Artículo:
+		    public function user(){
+				return $this->belongsTo('App\User', 'creado_por');
+			}
